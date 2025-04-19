@@ -2,57 +2,179 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Student;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\Facades\GraphQL;
+use Illuminate\Support\Facades\Log;
 
-class StudentsQuery extends Query
+class StudentsQuery
 {
-    protected $attributes = [
-        'name' => 'students',
-        'description' => 'Get a list of students'
-    ];
-
-    public function type(): Type
+    /**
+     * Get a single student by public hash
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @return array|null
+     */
+    public function getStudentInfo($rootValue, array $args)
     {
-        return Type::listOf(GraphQL::type('Student'));
+        Log::info('GraphQL Query: sisi_GetStudentInfo', $args);
+        
+        // Get the public hash from arguments
+        $publicHash = $args['publicHash'] ?? '';
+        
+        // Mock data - we'll pretend this student has this public hash
+        $students = $this->getMockStudentData();
+        
+        // In a real system, we would look up by the public hash
+        // For this mock, we'll just return the first student
+        return $students[0] ?? null;
     }
-
-    public function args(): array
+    
+    /**
+     * Get a list of students with pagination
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @return array
+     */
+    public function getStudentsInfo($rootValue, array $args)
+    {
+        Log::info('GraphQL Query: sisi_GetStudentsInfo', $args);
+        
+        $skip = $args['skip'] ?? 0;
+        $take = $args['take'] ?? 10;
+        
+        // Get mock student data
+        $students = $this->getMockStudentData();
+        
+        // Apply pagination
+        return array_slice($students, $skip, $take);
+    }
+    
+    /**
+     * Get students enrolled in thesis course
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @return array
+     */
+    public function getStudentsEnrolledInThesis($rootValue, array $args)
+    {
+        Log::info('GraphQL Query: sisi_GetStudentsEnrolledInThesis', $args);
+        
+        $departmentId = $args['departmentId'] ?? '';
+        
+        // Get mock student data
+        $students = $this->getMockStudentData();
+        
+        // Filter by department ID if provided
+        if ($departmentId) {
+            $students = array_filter($students, function ($student) use ($departmentId) {
+                return $student['department_id'] === $departmentId;
+            });
+        }
+        
+        // For this mock, we'll pretend all students with has_selected_research=true
+        // are enrolled in the thesis course
+        $students = array_filter($students, function ($student) {
+            return $student['has_selected_research'] === true;
+        });
+        
+        return array_values($students);
+    }
+    
+    /**
+     * Get all students with optional department filter
+     *
+     * @param null $rootValue
+     * @param array $args
+     * @return array
+     */
+    public function getStudents($rootValue, array $args)
+    {
+        Log::info('GraphQL Query: sisi_GetStudents', $args);
+        
+        $departmentId = $args['departmentId'] ?? null;
+        
+        // Get mock student data
+        $students = $this->getMockStudentData();
+        
+        // Filter by department ID if provided
+        if ($departmentId) {
+            $students = array_filter($students, function ($student) use ($departmentId) {
+                return $student['department_id'] === $departmentId;
+            });
+        }
+        
+        return array_values($students);
+    }
+    
+    /**
+     * Return mock student data
+     *
+     * @return array
+     */
+    private function getMockStudentData()
     {
         return [
-            'department_id' => [
-                'type' => Type::id(),
-                'description' => 'Filter by department ID'
+            [
+                'sisi_id' => 'ST12345',
+                'first_name' => 'Намдаг',
+                'last_name' => 'Гантулга',
+                'student_email' => 'namdag.gantulga@stud.num.edu.mn',
+                'personal_email' => 'namdag.gantulga@gmail.com',
+                'program_name' => 'Компьютерийн ухаан',
+                'program_id' => '101',
+                'phone' => '88112233',
+                'department_id' => '1',
+                'has_selected_research' => true
             ],
-            'program_id' => [
-                'type' => Type::id(),
-                'description' => 'Filter by program ID'
+            [
+                'sisi_id' => 'ST12346',
+                'first_name' => 'Очир',
+                'last_name' => 'Пүрэв',
+                'student_email' => 'ochir.purev@stud.num.edu.mn',
+                'personal_email' => 'ochir.purev@gmail.com',
+                'program_name' => 'Компьютерийн ухаан',
+                'program_id' => '101',
+                'phone' => '88223344',
+                'department_id' => '1',
+                'has_selected_research' => true
             ],
-            'has_selected_research' => [
-                'type' => Type::boolean(),
-                'description' => 'Filter by research selection status'
+            [
+                'sisi_id' => 'ST12347',
+                'first_name' => 'Сүхээ',
+                'last_name' => 'Батаа',
+                'student_email' => 'sukhee.bataa@stud.num.edu.mn',
+                'personal_email' => 'sukhee.bataa@gmail.com',
+                'program_name' => 'Мэдээллийн системийн удирдлага',
+                'program_id' => '102',
+                'phone' => '88334455',
+                'department_id' => '1',
+                'has_selected_research' => true
+            ],
+            [
+                'sisi_id' => 'ST12348',
+                'first_name' => 'Мөнх',
+                'last_name' => 'Цэцэг',
+                'student_email' => 'munkh.tsetseg@stud.num.edu.mn',
+                'personal_email' => 'munkh.tsetseg@gmail.com',
+                'program_name' => 'Мэдээллийн системийн удирдлага',
+                'program_id' => '102',
+                'phone' => '88445566',
+                'department_id' => '1',
+                'has_selected_research' => false
+            ],
+            [
+                'sisi_id' => 'ST12349',
+                'first_name' => 'Золжаргал',
+                'last_name' => 'Дулам',
+                'student_email' => 'zoljargal.dulam@stud.num.edu.mn',
+                'personal_email' => 'zoljargal.dulam@gmail.com',
+                'program_name' => 'Физик',
+                'program_id' => '201',
+                'phone' => '88556677',
+                'department_id' => '2',
+                'has_selected_research' => true
             ]
         ];
     }
-
-    public function resolve($root, $args)
-    {
-        $query = Student::query();
-
-        if (isset($args['department_id'])) {
-            $query->where('department_id', $args['department_id']);
-        }
-
-        if (isset($args['program_id'])) {
-            $query->where('program_id', $args['program_id']);
-        }
-
-        if (isset($args['has_selected_research'])) {
-            $query->where('has_selected_research', $args['has_selected_research']);
-        }
-
-        return $query->get();
-    }
-}   
+}

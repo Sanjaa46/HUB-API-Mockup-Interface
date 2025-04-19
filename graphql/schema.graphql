@@ -1,0 +1,96 @@
+# This is the GraphQL schema for the mockup interface
+# Based on the requirements in API.pdf
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+# Student type definition
+type Student {
+  sisi_id: String!
+  first_name: String!
+  last_name: String!
+  student_email: String!
+  personal_email: String
+  program_name: String!
+  program_id: ID!
+  phone: String
+  department_id: ID!
+  has_selected_research: Boolean!
+}
+
+# Teacher type definition
+type Teacher {
+  id: ID!
+  dep_id: ID!
+  department_name: String!
+  firstname: String!
+  lastname: String!
+  mail: String!
+  phone: String
+  position: String!
+  academic_degree: String
+}
+
+# Department type definition
+type Department {
+  id: ID!
+  name: String!
+  programs: [Program]!
+}
+
+# Program type definition
+type Program {
+  program_id: ID!
+  program_index: String!
+  program_name: String!
+}
+
+# Login input type for authentication
+input LoginInput {
+  client_id: String!
+  client_secret: String!
+}
+
+# Login response type
+type LoginResponse {
+  access_token: String!
+  expires_in: Int!
+}
+
+# Root Query type
+type Query {
+  # Student queries
+  sisi_GetStudentInfo(publicHash: String!, clientId: String!): Student 
+    @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentInfo")
+  
+  sisi_GetStudentsInfo(clientId: String!, skip: Int, take: Int): [Student] 
+    @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentsInfo")
+  
+  sisi_GetStudentsEnrolledInThesis(
+    clientId: String!, 
+    departmentId: String!, 
+    semesterId: String!, 
+    courseCode: String!
+  ): [Student] @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentsEnrolledInThesis")
+  
+  sisi_GetStudents(clientId: String!, departmentId: String): [Student]
+    @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudents")
+  
+  # Teacher queries
+  hr_GetTeachers(clientId: String!, departmentId: String): [Teacher]
+    @field(resolver: "App\\GraphQL\\Queries\\TeachersQuery@getTeachers")
+  
+  # Department queries
+  hr_GetDepartments(clientId: String!): [Department]
+    @field(resolver: "App\\GraphQL\\Queries\\DepartmentsQuery@getDepartments")
+}
+
+# Root Mutation type
+type Mutation {
+  # Login mutation
+  login(input: LoginInput!): LoginResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\AuthMutation@login")
+}
