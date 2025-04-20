@@ -34,14 +34,14 @@ class DepartmentsQuery
                 'name' => 'МКУТ (Математик, Компьютер, Техникийн)',
                 'programs' => [
                     [
-                        'program_id' => '101',
-                        'program_index' => 'D0612345',
-                        'program_name' => 'Компьютерийн ухаан'
+                        'id' => '101',
+                        'index' => 'D0612345',
+                        'name' => 'Компьютерийн ухаан'
                     ],
                     [
-                        'program_id' => '102',
-                        'program_index' => 'D0612346',
-                        'program_name' => 'Мэдээллийн системийн удирдлага'
+                        'id' => '102',
+                        'index' => 'D0612346',
+                        'name' => 'Мэдээллийн системийн удирдлага'
                     ]
                 ]
             ],
@@ -50,9 +50,9 @@ class DepartmentsQuery
                 'name' => 'Физик Электроникийн',
                 'programs' => [
                     [
-                        'program_id' => '201',
-                        'program_index' => 'D0712345',
-                        'program_name' => 'Физик'
+                        'id' => '201',
+                        'index' => 'D0712345',
+                        'name' => 'Физик'
                     ]
                 ]
             ],
@@ -61,9 +61,9 @@ class DepartmentsQuery
                 'name' => 'Биологийн',
                 'programs' => [
                     [
-                        'program_id' => '301',
-                        'program_index' => 'D0812345',
-                        'program_name' => 'Биологи'
+                        'id' => '301',
+                        'index' => 'D0812345',
+                        'name' => 'Биологи'
                     ]
                 ]
             ]

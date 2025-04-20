@@ -9,24 +9,15 @@ use App\Http\Controllers\InfoController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [InfoController::class, 'info']);
-Route::get('/health', [InfoController::class, 'healthCheck']);
-Route::get('/docs/readme', [InfoController::class, 'readme']);
-Route::get('/docs/installation', [InfoController::class, 'installation']);
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
 
-// The GraphQL endpoint is automatically registered by the lighthouse package 
-// at /graphql based on the default configuration
 
-// For compatibility with the "Мэдээллийн урсгалыг удирдах орчин" system,
-// we'll also expose the GraphQL endpoint at /gateway
-Route::any('/gateway', function (Request $request) {
-    return app()->handle(
-        Request::create('/graphql', $request->method(), $request->all())
-    );
+Route::get('/', function () {
+    return response()->json([
+        'name' => 'HUB API Mockup Interface',
+        'description' => 'Temporary mockup for the "Мэдээллийн урсгалыг удирдах орчин"',
+        'version' => '1.0.0',
+        'endpoint' => url('/graphql')
+    ]);
 });
+

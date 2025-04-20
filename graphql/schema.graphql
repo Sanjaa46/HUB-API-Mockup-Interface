@@ -1,10 +1,11 @@
-# This is the GraphQL schema for the mockup interface
-# Based on the requirements in API.pdf
-
-"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+"""
+A date string with format `Y-m-d`, e.g. `2011-05-23`.
+"""
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
-"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+"""
+A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`.
+"""
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 # Student type definition
@@ -24,11 +25,11 @@ type Student {
 # Teacher type definition
 type Teacher {
   id: ID!
-  dep_id: ID!
+  department_id: ID!
   department_name: String!
-  firstname: String!
-  lastname: String!
-  mail: String!
+  first_name: String!
+  last_name: String!
+  email: String!
   phone: String
   position: String!
   academic_degree: String
@@ -43,9 +44,9 @@ type Department {
 
 # Program type definition
 type Program {
-  program_id: ID!
-  program_index: String!
-  program_name: String!
+  id: ID!
+  index: String!
+  name: String!
 }
 
 # Login input type for authentication
@@ -70,14 +71,11 @@ type Query {
     @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentsInfo")
   
   sisi_GetStudentsEnrolledInThesis(
-    clientId: String!, 
-    departmentId: String!, 
-    semesterId: String!, 
-    courseCode: String!
-  ): [Student] @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentsEnrolledInThesis")
-  
-  sisi_GetStudents(clientId: String!, departmentId: String): [Student]
-    @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudents")
+  clientId: String!, 
+  departmentId: String, 
+  semesterId: String!, 
+  courseCode: String!
+): [Student] @field(resolver: "App\\GraphQL\\Queries\\StudentsQuery@getStudentsEnrolledInThesis")
   
   # Teacher queries
   hr_GetTeachers(clientId: String!, departmentId: String): [Teacher]

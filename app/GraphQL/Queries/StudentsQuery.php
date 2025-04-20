@@ -60,12 +60,12 @@ class StudentsQuery
     {
         Log::info('GraphQL Query: sisi_GetStudentsEnrolledInThesis', $args);
         
-        $departmentId = $args['departmentId'] ?? '';
+        $departmentId = $args['departmentId'] ?? null;
         
         // Get mock student data
         $students = $this->getMockStudentData();
         
-        // Filter by department ID if provided
+        // Filter by department ID only if provided
         if ($departmentId) {
             $students = array_filter($students, function ($student) use ($departmentId) {
                 return $student['department_id'] === $departmentId;
@@ -82,32 +82,6 @@ class StudentsQuery
     }
     
     /**
-     * Get all students with optional department filter
-     *
-     * @param null $rootValue
-     * @param array $args
-     * @return array
-     */
-    public function getStudents($rootValue, array $args)
-    {
-        Log::info('GraphQL Query: sisi_GetStudents', $args);
-        
-        $departmentId = $args['departmentId'] ?? null;
-        
-        // Get mock student data
-        $students = $this->getMockStudentData();
-        
-        // Filter by department ID if provided
-        if ($departmentId) {
-            $students = array_filter($students, function ($student) use ($departmentId) {
-                return $student['department_id'] === $departmentId;
-            });
-        }
-        
-        return array_values($students);
-    }
-    
-    /**
      * Return mock student data
      *
      * @return array
@@ -116,10 +90,10 @@ class StudentsQuery
     {
         return [
             [
-                'sisi_id' => 'ST12345',
+                'sisi_id' => '21B1NUM0435',
                 'first_name' => 'Намдаг',
                 'last_name' => 'Гантулга',
-                'student_email' => 'namdag.gantulga@stud.num.edu.mn',
+                'student_email' => '21b1num0435@stud.num.edu.mn',
                 'personal_email' => 'namdag.gantulga@gmail.com',
                 'program_name' => 'Компьютерийн ухаан',
                 'program_id' => '101',
@@ -128,10 +102,10 @@ class StudentsQuery
                 'has_selected_research' => true
             ],
             [
-                'sisi_id' => 'ST12346',
+                'sisi_id' => '21B1NUM0436',
                 'first_name' => 'Очир',
                 'last_name' => 'Пүрэв',
-                'student_email' => 'ochir.purev@stud.num.edu.mn',
+                'student_email' => '21b1num0436@stud.num.edu.mn',
                 'personal_email' => 'ochir.purev@gmail.com',
                 'program_name' => 'Компьютерийн ухаан',
                 'program_id' => '101',
@@ -140,10 +114,10 @@ class StudentsQuery
                 'has_selected_research' => true
             ],
             [
-                'sisi_id' => 'ST12347',
+                'sisi_id' => '21B1NUM0437',
                 'first_name' => 'Сүхээ',
                 'last_name' => 'Батаа',
-                'student_email' => 'sukhee.bataa@stud.num.edu.mn',
+                'student_email' => '21b1num0437@stud.num.edu.mn',
                 'personal_email' => 'sukhee.bataa@gmail.com',
                 'program_name' => 'Мэдээллийн системийн удирдлага',
                 'program_id' => '102',
@@ -152,10 +126,10 @@ class StudentsQuery
                 'has_selected_research' => true
             ],
             [
-                'sisi_id' => 'ST12348',
+                'sisi_id' => '21B1NUM0438',
                 'first_name' => 'Мөнх',
                 'last_name' => 'Цэцэг',
-                'student_email' => 'munkh.tsetseg@stud.num.edu.mn',
+                'student_email' => '21b1num0438@stud.num.edu.mn',
                 'personal_email' => 'munkh.tsetseg@gmail.com',
                 'program_name' => 'Мэдээллийн системийн удирдлага',
                 'program_id' => '102',
@@ -164,10 +138,10 @@ class StudentsQuery
                 'has_selected_research' => false
             ],
             [
-                'sisi_id' => 'ST12349',
+                'sisi_id' => '21B1NUM0439',
                 'first_name' => 'Золжаргал',
                 'last_name' => 'Дулам',
-                'student_email' => 'zoljargal.dulam@stud.num.edu.mn',
+                'student_email' => '21b1num0439@stud.num.edu.mn',
                 'personal_email' => 'zoljargal.dulam@gmail.com',
                 'program_name' => 'Физик',
                 'program_id' => '201',
